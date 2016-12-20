@@ -11,16 +11,19 @@ ARG CURL="curl -sSL"
 ARG JENKINS_USER="jenkins"
 
 #
-# Install Docker and Docker Compose.
+# Install Docker (client only) and Docker Compose.
+#
+# See <https://docs.docker.com/engine/installation/binaries/#/url-patterns-for-static-binaries>
+# for docs on constructing links to static binaries.
 #
 USER root
 RUN cd /tmp \
  && ${CURL} -o docker.tgz \
             https://get.docker.com/builds/$(uname -s)/$(uname -m)/docker-${DOCKER_VERSION}.tgz \
  && tar -xf docker.tgz \
- && chown root:root docker/* \
- && chmod 755 docker/* \
- && mv docker/* /usr/bin \
+ && chown root:root docker/docker \
+ && chmod 755 docker/docker \
+ && mv docker/docker /usr/bin \
  && rm -rf docker* \
  && groupadd -r docker \
  && usermod -aG docker ${JENKINS_USER} \
