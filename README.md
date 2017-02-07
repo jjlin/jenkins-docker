@@ -11,4 +11,5 @@ Example:
                -p 8080:8080 -p 50000:50000 \
                -v /var/run/docker.sock:/var/run/docker.sock \
                -v /etc/localtime:/etc/localtime:ro \
+               -e JAVA_OPTS="-Duser.timezone=Antarctica/South_Pole" \
                --name jenkins-docker jjlin/jenkins-docker
