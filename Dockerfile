@@ -1,7 +1,12 @@
 FROM jenkins
 
-ARG DOCKER_VERSION="1.13.1"
-ARG DOCKER_COMPOSE_VERSION="1.11.0"
+#
+# If no specific value is provided via `docker build --build-arg ...`,
+# then the latest released version is implied.
+#
+ARG DOCKER_VERSION
+ARG DOCKER_COMPOSE_VERSION
+
 ARG CURL="curl -sSL"
 
 #
@@ -17,9 +22,16 @@ ARG JENKINS_USER="jenkins"
 # for docs on constructing links to static binaries.
 #
 USER root
-RUN cd /tmp \
+COPY get-latest-release-tag.sh /usr/local/bin/
+RUN docker_version=${DOCKER_VERSION:-$(get-latest-release-tag.sh docker docker | tr -d 'v')} \
+ && docker_compose_version=${DOCKER_COMPOSE_VERSION:-$(get-latest-release-tag.sh docker compose)} \
+ && echo "Versions" \
+ && echo "========" \
+ && echo "Docker: ${docker_version}" \
+ && echo "Docker Compose: ${docker_compose_version}" \
+ && cd /tmp \
  && ${CURL} -o docker.tgz \
-            https://get.docker.com/builds/$(uname -s)/$(uname -m)/docker-${DOCKER_VERSION}.tgz \
+            https://get.docker.com/builds/$(uname -s)/$(uname -m)/docker-${docker_version}.tgz \
  && tar -xf docker.tgz \
  && chown root:root docker/docker \
  && chmod 755 docker/docker \
@@ -29,7 +41,7 @@ RUN cd /tmp \
  && usermod -aG docker ${JENKINS_USER} \
  && cd /usr/bin \
  && ${CURL} -o docker-compose \
-            https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-$(uname -s)-$(uname -m) \
+            https://github.com/docker/compose/releases/download/${docker_compose_version}/docker-compose-$(uname -s)-$(uname -m) \
  && chown root:root docker-compose \
  && chmod 755 docker-compose
 
