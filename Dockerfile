@@ -7,7 +7,7 @@ FROM jenkins
 ARG DOCKER_VERSION
 ARG DOCKER_COMPOSE_VERSION
 
-ARG CURL="curl -sSL"
+ARG CURL="curl -fsSL"
 
 #
 # Values derived from <https://github.com/jenkinsci/docker/blob/master/Dockerfile>.
