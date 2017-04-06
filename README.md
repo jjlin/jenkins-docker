@@ -1,5 +1,8 @@
 This image consists of the [official Jenkins image](https://hub.docker.com/_/jenkins/)
-with Docker and Docker Compose binaries installed for use with the host's Docker installation.
+with Docker and Docker Compose binaries included for use with the host's Docker installation.
+It is [linked](https://docs.docker.com/docker-hub/builds/#repository-links) to the
+[Jenkins](https://hub.docker.com/_/jenkins/) and [Docker](https://hub.docker.com/_/docker/)
+repositories for automatic rebuilds on upstream updates.
 
 This setup is useful if you want a Dockerized Jenkins to be able to create
 new Docker containers for build purposes, without the
