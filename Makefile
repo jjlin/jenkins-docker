@@ -1,8 +1,8 @@
 IMAGE_NAME := jenkins-docker
 IMAGE_TAG := latest
 
-LATEST_DOCKER_VERSION := "$(shell ./get-latest-release-tag.sh docker docker | tr -d 'v')"
-LATEST_DOCKER_COMPOSE_VERSION := "$(shell ./get-latest-release-tag.sh docker compose)"
+LATEST_DOCKER_VERSION := $(shell ./get-latest-release-tag.sh docker docker | tr -d 'v')
+LATEST_DOCKER_COMPOSE_VERSION := $(shell ./get-latest-release-tag.sh docker compose)
 
 image:
 	docker build -t "$(IMAGE_NAME):$(IMAGE_TAG)" \
