@@ -29,6 +29,7 @@ RUN docker_version=${DOCKER_VERSION:-$(get-latest-release-tag.sh docker docker |
  && echo "========" \
  && echo "Docker: ${docker_version}" \
  && echo "Docker Compose: ${docker_compose_version}" \
+ && set -x \
  && cd /tmp \
  && ${CURL} -o docker.tgz \
             https://get.docker.com/builds/$(uname -s)/$(uname -m)/docker-${docker_version}.tgz \
