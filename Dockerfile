@@ -22,8 +22,8 @@ ARG JENKINS_USER="jenkins"
 # See <https://hub.docker.com/_/docker/> for links to these Dockerfiles.
 #
 USER root
-COPY get-latest-release-tag.sh /usr/local/bin/
-RUN docker_version=${DOCKER_VERSION:-$(get-latest-release-tag.sh docker docker | tr -d 'v')} \
+COPY *.sh /usr/local/bin/
+RUN docker_version=${DOCKER_VERSION:-$(get-latest-docker-release.sh edge)} \
  && docker_compose_version=${DOCKER_COMPOSE_VERSION:-$(get-latest-release-tag.sh docker compose)} \
  && echo "Versions" \
  && echo "========" \
