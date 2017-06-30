@@ -18,8 +18,8 @@ ARG JENKINS_USER="jenkins"
 #
 # Install Docker (client only) and Docker Compose.
 #
-# See <https://docs.docker.com/engine/installation/binaries/#/url-patterns-for-static-binaries>
-# for docs on constructing links to static binaries.
+# URLs to Docker static binary archives are taken from the `docker` Dockerfiles.
+# See <https://hub.docker.com/_/docker/> for links to these Dockerfiles.
 #
 USER root
 COPY get-latest-release-tag.sh /usr/local/bin/
@@ -32,7 +32,7 @@ RUN docker_version=${DOCKER_VERSION:-$(get-latest-release-tag.sh docker docker |
  && set -x \
  && cd /tmp \
  && ${CURL} -o docker.tgz \
-            https://get.docker.com/builds/$(uname -s)/$(uname -m)/docker-${docker_version}.tgz \
+            https://download.docker.com/linux/static/edge/x86_64/docker-${docker_version}.tgz \
  && tar -xf docker.tgz \
  && chown root:root docker/docker \
  && chmod 755 docker/docker \
@@ -42,7 +42,7 @@ RUN docker_version=${DOCKER_VERSION:-$(get-latest-release-tag.sh docker docker |
  && usermod -aG docker ${JENKINS_USER} \
  && cd /usr/bin \
  && ${CURL} -o docker-compose \
-            https://github.com/docker/compose/releases/download/${docker_compose_version}/docker-compose-$(uname -s)-$(uname -m) \
+            https://github.com/docker/compose/releases/download/${docker_compose_version}/docker-compose-Linux-x86_64 \
  && chown root:root docker-compose \
  && chmod 755 docker-compose
 
