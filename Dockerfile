@@ -1,4 +1,4 @@
-FROM jenkins
+FROM jenkins/jenkins:lts
 
 #
 # If no specific value is provided via `docker build --build-arg ...`,
