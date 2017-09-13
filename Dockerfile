@@ -29,6 +29,11 @@ RUN docker_version=${DOCKER_VERSION:-$(get-latest-docker-release.sh edge)} \
  && echo "========" \
  && echo "Docker: ${docker_version}" \
  && echo "Docker Compose: ${docker_compose_version}" \
+ && echo \
+ && echo "Environment" \
+ && echo "===========" \
+ && env \
+ && echo \
  && set -x \
  && cd /tmp \
  && ${CURL} -o docker.tgz \
