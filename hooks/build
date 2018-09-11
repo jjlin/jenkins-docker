@@ -1,0 +1,15 @@
+#!/bin/bash
+
+BUILD_VARS=(
+    DOCKER_VERSION="$(./get-latest-docker-release.sh edge)"
+    DOCKER_COMPOSE_VERSION="$(./get-latest-release-tag.sh docker compose)"
+    IMAGE_CREATED="$(date --utc --iso-8601=seconds)"
+    IMAGE_REVISION="$(git rev-parse --short=8 HEAD)"
+)
+
+BUILD_ARGS=()
+for var in "${BUILD_VARS[@]}"; do
+    BUILD_ARGS+=(--build-arg "${var}")
+done
+
+docker build "${BUILD_ARGS[@]}" -t ${IMAGE_NAME} .

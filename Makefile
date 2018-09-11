@@ -1,14 +1,9 @@
 IMAGE_NAME := jenkins-docker
 IMAGE_TAG := latest
 
-LATEST_DOCKER_VERSION := $(shell ./get-latest-release-tag.sh docker docker | tr -d 'v')
-LATEST_DOCKER_COMPOSE_VERSION := $(shell ./get-latest-release-tag.sh docker compose)
-
 image:
-	docker build -t "$(IMAGE_NAME):$(IMAGE_TAG)" \
-	             --build-arg DOCKER_VERSION="$(LATEST_DOCKER_VERSION)" \
-	             --build-arg DOCKER_COMPOSE_VERSION="$(LATEST_DOCKER_COMPOSE_VERSION)" \
-	             . 2>&1 | tee build.log
+	IMAGE_NAME=$(IMAGE_NAME):$(IMAGE_TAG) \
+	./hooks/build 2>&1 | tee build.log
 
 run:
 	docker run -itd --restart=always \
@@ -24,8 +19,8 @@ rmf:
 	docker rm -f $(IMAGE_NAME)
 
 latest-version-info:
-	@echo "Docker: $(LATEST_DOCKER_VERSION)"
-	@echo "Docker Compose: $(LATEST_DOCKER_COMPOSE_VERSION)"
+	@echo "Docker: $(shell ./get-latest-docker-release.sh edge)"
+	@echo "Docker Compose: $(shell ./get-latest-release-tag.sh docker compose)"
 
 clean-dangling-images:
 	docker rmi `docker images --filter 'dangling=true' --no-trunc --quiet`

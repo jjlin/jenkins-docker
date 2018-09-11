@@ -1,13 +1,26 @@
 FROM jenkins/jenkins:lts
+LABEL maintainer="Jeremy Lin <jjlin@cs.stanford.edu>"
 
 #
-# If no specific value is provided via `docker build --build-arg ...`,
-# then the latest released version is implied.
+# Args to be passed in via `--build-arg`.
 #
-ARG DOCKER_VERSION
 ARG DOCKER_COMPOSE_VERSION
+ARG DOCKER_VERSION
+ARG IMAGE_CREATED
+ARG IMAGE_REVISION
+
+# <https://github.com/opencontainers/image-spec/blob/master/annotations.md>
+LABEL org.opencontainers.image.created="${IMAGE_CREATED}"
+LABEL org.opencontainers.image.revision="${IMAGE_REVISION}"
+LABEL org.opencontainers.image.source="https://github.com/jjlin/jenkins-docker"
+LABEL org.opencontainers.image.url="https://hub.docker.com/r/jjlin/jenkins-docker"
+
+LABEL docker-compose-version="${DOCKER_COMPOSE_VERSION}"
+LABEL docker-version="${DOCKER_VERSION}"
 
 ARG CURL="curl -fsSL"
+ARG DOCKER_COMPOSE_URL="https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-Linux-x86_64"
+ARG DOCKER_URL="https://download.docker.com/linux/static/edge/x86_64/docker-${DOCKER_VERSION}.tgz"
 
 #
 # Values derived from <https://github.com/jenkinsci/docker/blob/master/Dockerfile>.
@@ -22,13 +35,10 @@ ARG JENKINS_USER="jenkins"
 # See <https://hub.docker.com/_/docker/> for links to these Dockerfiles.
 #
 USER root
-COPY *.sh /usr/local/bin/
-RUN docker_version=${DOCKER_VERSION:-$(get-latest-docker-release.sh edge)} \
- && docker_compose_version=${DOCKER_COMPOSE_VERSION:-$(get-latest-release-tag.sh docker compose)} \
- && echo "Versions" \
+RUN echo "Versions" \
  && echo "========" \
- && echo "Docker: ${docker_version}" \
- && echo "Docker Compose: ${docker_compose_version}" \
+ && echo "Docker: ${DOCKER_VERSION}" \
+ && echo "Docker Compose: ${DOCKER_COMPOSE_VERSION}" \
  && echo \
  && echo "Environment" \
  && echo "===========" \
@@ -36,8 +46,7 @@ RUN docker_version=${DOCKER_VERSION:-$(get-latest-docker-release.sh edge)} \
  && echo \
  && set -x \
  && cd /tmp \
- && ${CURL} -o docker.tgz \
-            https://download.docker.com/linux/static/edge/x86_64/docker-${docker_version}.tgz \
+ && ${CURL} -o docker.tgz ${DOCKER_URL} \
  && tar -xf docker.tgz \
  && chown root:root docker/docker \
  && chmod 755 docker/docker \
@@ -46,8 +55,7 @@ RUN docker_version=${DOCKER_VERSION:-$(get-latest-docker-release.sh edge)} \
  && groupadd -r docker \
  && usermod -aG docker ${JENKINS_USER} \
  && cd /usr/bin \
- && ${CURL} -o docker-compose \
-            https://github.com/docker/compose/releases/download/${docker_compose_version}/docker-compose-Linux-x86_64 \
+ && ${CURL} -o docker-compose ${DOCKER_COMPOSE_URL} \
  && chown root:root docker-compose \
  && chmod 755 docker-compose
 
