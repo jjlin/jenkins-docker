@@ -20,7 +20,7 @@ LABEL docker-version="${DOCKER_VERSION}"
 
 ARG CURL="curl -fsSL"
 ARG DOCKER_COMPOSE_URL="https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-Linux-x86_64"
-ARG DOCKER_URL="https://download.docker.com/linux/static/edge/x86_64/docker-${DOCKER_VERSION}.tgz"
+ARG DOCKER_URL="https://download.docker.com/linux/static/stable/x86_64/docker-${DOCKER_VERSION}.tgz"
 
 #
 # Values derived from <https://github.com/jenkinsci/docker/blob/master/Dockerfile>.
