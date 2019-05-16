@@ -1,0 +1,3 @@
+*.sh linguist-vendored
+Makefile linguist-vendored
+hooks/* linguist-vendored
