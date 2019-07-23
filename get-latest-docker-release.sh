@@ -21,7 +21,7 @@ curl -sSL "https://download.docker.com/linux/static/${channel}/x86_64/" |
     # Strip out HTML tags.
     sed 's/<[^>]*>//g' |
     # Extract the tarball names.
-    egrep -o 'docker-.*\.tgz' |
+    egrep -o 'docker-[0-9]+.*\.tgz' |
     # Extract the versions.
     sed -e 's/^docker-//' -e 's/\.tgz$//' |
     # Version-sort and return the latest version.
