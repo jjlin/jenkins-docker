@@ -19,14 +19,7 @@ rmf:
 	docker rm -f $(IMAGE_NAME)
 
 latest-version-info:
-	@echo "Docker: $(shell ./get-latest-docker-release.sh edge)"
+	@echo "Docker: $(shell ./get-latest-docker-release.sh stable)"
 	@echo "Docker Compose: $(shell ./get-latest-release-tag.sh docker compose)"
 
-clean-dangling-images:
-	docker rmi `docker images --filter 'dangling=true' --no-trunc --quiet`
-
-clean-dangling-volumes:
-	docker volume rm `docker volume ls --filter 'dangling=true' --quiet`
-
-.PHONY: image run kill rmf latest-version-info \
-	clean-dangling-images clean-dangling-volumes
+.PHONY: image run kill rmf latest-version-info
