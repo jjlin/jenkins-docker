@@ -1,24 +1,20 @@
 FROM jenkins/jenkins:lts
-LABEL maintainer="Jeremy Lin <jjlin@cs.stanford.edu>"
+
+#
+# Static labels (dynamic labels defined via the `build` hook).
+# Ref: https://github.com/opencontainers/image-spec/blob/master/annotations.md
+#
+LABEL org.opencontainers.image.authors="Jeremy Lin <jeremy.lin@gmail.com>"
+LABEL org.opencontainers.image.source="https://github.com/jjlin/jenkins-docker"
+LABEL org.opencontainers.image.url="https://hub.docker.com/r/jjlin/jenkins-docker"
+LABEL org.opencontainers.image.licenses="MIT"
 
 #
 # Args to be passed in via `--build-arg`.
 #
 ARG DOCKER_COMPOSE_VERSION
 ARG DOCKER_VERSION
-ARG IMAGE_CREATED
-ARG IMAGE_REVISION
 
-# <https://github.com/opencontainers/image-spec/blob/master/annotations.md>
-LABEL org.opencontainers.image.created="${IMAGE_CREATED}"
-LABEL org.opencontainers.image.revision="${IMAGE_REVISION}"
-LABEL org.opencontainers.image.source="https://github.com/jjlin/jenkins-docker"
-LABEL org.opencontainers.image.url="https://hub.docker.com/r/jjlin/jenkins-docker"
-
-LABEL docker-compose-version="${DOCKER_COMPOSE_VERSION}"
-LABEL docker-version="${DOCKER_VERSION}"
-
-ARG CURL="curl -fsSL"
 ARG DOCKER_COMPOSE_URL="https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-Linux-x86_64"
 ARG DOCKER_URL="https://download.docker.com/linux/static/stable/x86_64/docker-${DOCKER_VERSION}.tgz"
 
@@ -44,9 +40,9 @@ RUN echo "Versions" \
  && echo "===========" \
  && env \
  && echo \
- && set -x \
+ && set -ex \
  && cd /tmp \
- && ${CURL} -o docker.tgz ${DOCKER_URL} \
+ && curl -fsSL -o docker.tgz ${DOCKER_URL} \
  && tar -xf docker.tgz \
  && chown root:root docker/docker \
  && chmod 755 docker/docker \
@@ -55,7 +51,7 @@ RUN echo "Versions" \
  && groupadd -r docker \
  && usermod -aG docker ${JENKINS_USER} \
  && cd /usr/bin \
- && ${CURL} -o docker-compose ${DOCKER_COMPOSE_URL} \
+ && curl -fsSL -o docker-compose ${DOCKER_COMPOSE_URL} \
  && chown root:root docker-compose \
  && chmod 755 docker-compose
 

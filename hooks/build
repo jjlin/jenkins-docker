@@ -1,15 +1,35 @@
 #!/bin/bash
 
-BUILD_VARS=(
-    DOCKER_VERSION="$(./get-latest-docker-release.sh stable)"
-    DOCKER_COMPOSE_VERSION="$(./get-latest-release-tag.sh docker compose)"
-    IMAGE_CREATED="$(date --utc --iso-8601=seconds)"
-    IMAGE_REVISION="$(git rev-parse --short=8 HEAD)"
-)
+set -ex
 
+DOCKER_VERSION="$(./get-latest-docker-release.sh stable)"
+DOCKER_COMPOSE_VERSION="$(./get-latest-release-tag.sh docker compose)"
+
+if [[ -z "${SOURCE_COMMIT}" ]]; then
+    # This var is typically predefined by Docker Hub, but it won't be
+    # when testing locally.
+    SOURCE_COMMIT="$(git rev-parse HEAD)"
+fi
+
+LABELS=(
+    org.opencontainers.image.created="$(date --utc --iso-8601=seconds)"
+    org.opencontainers.image.revision="${SOURCE_COMMIT}"
+
+    docker-compose-version="${DOCKER_COMPOSE_VERSION}"
+    docker-version="${DOCKER_VERSION}"
+)
+LABEL_ARGS=()
+for label in "${LABELS[@]}"; do
+    LABEL_ARGS+=(--label "${label}")
+done
+
+BUILD_VARS=(
+    DOCKER_VERSION="${DOCKER_VERSION}"
+    DOCKER_COMPOSE_VERSION="${DOCKER_COMPOSE_VERSION}"
+)
 BUILD_ARGS=()
 for var in "${BUILD_VARS[@]}"; do
     BUILD_ARGS+=(--build-arg "${var}")
 done
 
-docker build "${BUILD_ARGS[@]}" -t ${IMAGE_NAME} .
+docker build "${BUILD_ARGS[@]}" "${LABEL_ARGS[@]}" -t ${IMAGE_NAME} .
