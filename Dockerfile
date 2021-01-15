@@ -1,13 +1,17 @@
 FROM jenkins/jenkins:lts
 
 #
-# Static labels (dynamic labels defined via the `build` hook).
+# Labels that can be defined purely within the Dockerfile.
+# Some additional labels are added dynamically via the `build` hook.
+# Note that `JENKINS_VERSION` is an env var set in the parent image.
+#
 # Ref: https://github.com/opencontainers/image-spec/blob/master/annotations.md
 #
 LABEL org.opencontainers.image.authors="Jeremy Lin <jeremy.lin@gmail.com>"
 LABEL org.opencontainers.image.source="https://github.com/jjlin/jenkins-docker"
 LABEL org.opencontainers.image.url="https://hub.docker.com/r/jjlin/jenkins-docker"
 LABEL org.opencontainers.image.licenses="MIT"
+LABEL org.opencontainers.image.version="${JENKINS_VERSION}"
 
 #
 # Args to be passed in via `--build-arg`.
