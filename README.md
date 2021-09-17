@@ -1,0 +1,1 @@
+Keepalive branch for GitHub Actions scheduled workflows, which would otherwise be [automatically disabled after 60 days of inactivity](https://docs.github.com/en/actions/reference/usage-limits-billing-and-administration#disabling-and-enabling-workflows) for public repos.
