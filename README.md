@@ -1,4 +1,4 @@
-![Docker Image Size](https://img.shields.io/docker/image-size/jjlin/jenkins-docker/latest)
+![Image Build Status](https://github.com/jjlin/jenkins-docker/actions/workflows/build.yml/badge.svg) ![Docker Image Size](https://img.shields.io/docker/image-size/jjlin/jenkins-docker/latest?color=brightgreen)
 
 This image consists of the [official Jenkins LTS image](https://hub.docker.com/r/jenkins/jenkins/) with Docker and Docker Compose binaries included for use with the host's Docker installation. It is [automatically built](https://github.com/jjlin/jenkins-docker/actions) once a day using GitHub Actions.
 
