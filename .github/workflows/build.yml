@@ -5,7 +5,7 @@ on:
     branches:
       - main
   schedule:
-    - cron: '25 9 * * *'
+    - cron: '25 */4 * * *'
   workflow_dispatch:
 
 jobs:
@@ -20,8 +20,9 @@ jobs:
           dt="$(curl -s "${url}" | jq -r "${filter}")"
           last_pushed="$(date -d "${dt}" +%s)"
           now="$(date +%s)"
-          last_build=$((now - 86400))
-          if (( last_pushed > last_build )); then
+          checks_per_day=4
+          last_checked=$(( now - 86400/checks_per_day ))
+          if (( last_pushed > last_checked )); then
             echo "::set-output name=updated::true"
           fi
 
