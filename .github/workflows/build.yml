@@ -9,9 +9,27 @@ on:
   workflow_dispatch:
 
 jobs:
+  parent-image:
+    name: Check for updated parent image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check last push time
+        run: |
+          url='https://hub.docker.com/v2/repositories/jenkins/jenkins/tags/latest'
+          filter='.images|.[]|select(.architecture=="amd64")|.last_pushed'
+          dt="$(curl -s "${url}" | jq -r "${filter}")"
+          last_pushed="$(date -d "${dt}" +%s)"
+          now="$(date +%s)"
+          last_build=$((now - 86400))
+          if (( last_pushed > last_build )); then
+            echo "::set-output name=updated::true"
+          fi
+
   build:
     name: Build Docker image
     runs-on: ubuntu-latest
+    needs: parent-image
+    if: needs.parent-image.outputs.updated == 'true'
     steps:
       - name: Check out repo
         uses: actions/checkout@v2
