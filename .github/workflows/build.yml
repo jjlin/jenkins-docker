@@ -77,6 +77,7 @@ jobs:
 
             docker-compose-version=${{ steps.vars.outputs.docker_compose_version }}
             docker-version=${{ steps.vars.outputs.docker_version }}
+          pull: true
           push: true
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new
