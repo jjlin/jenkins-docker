@@ -13,16 +13,15 @@ jobs:
     name: Check for updated parent image
     runs-on: ubuntu-latest
     steps:
-      - name: Check last push time
+      - name: Check last push times
         run: |
-          url='https://hub.docker.com/v2/repositories/jenkins/jenkins/tags/latest'
+          base_url='https://hub.docker.com/v2/repositories'
+          parent_url="${base_url}/jenkins/jenkins/tags/latest"
+          child_url="${base_url}/${{ secrets.DOCKER_HUB_USERNAME }}/jenkins-docker/tags/latest"
           filter='.images|.[]|select(.architecture=="amd64")|.last_pushed'
-          dt="$(curl -s "${url}" | jq -r "${filter}")"
-          last_pushed="$(date -d "${dt}" +%s)"
-          now="$(date +%s)"
-          checks_per_day=4
-          last_checked=$(( now - 86400/checks_per_day ))
-          if (( last_pushed > last_checked )); then
+          parent_last_pushed="$(date -d "$(curl -s "${parent_url}" | jq -r "${filter}")" +%s)"
+          child_last_pushed="$(date -d "$(curl -s "${child_url}" | jq -r "${filter}")" +%s)"
+          if (( parent_last_pushed > child_last_pushed )); then
             echo "::set-output name=updated::true"
           fi
 
