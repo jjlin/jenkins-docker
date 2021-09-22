@@ -12,8 +12,11 @@ jobs:
   parent-image:
     name: Check for updated parent image
     runs-on: ubuntu-latest
+    outputs:
+      updated: ${{ steps.check.outputs.updated }}
     steps:
       - name: Check last push times
+        id: check
         run: |
           base_url='https://hub.docker.com/v2/repositories'
           parent_url="${base_url}/jenkins/jenkins/tags/latest"
@@ -23,6 +26,8 @@ jobs:
           child_last_pushed="$(date -d "$(curl -s "${child_url}" | jq -r "${filter}")" +%s)"
           if (( parent_last_pushed > child_last_pushed )); then
             echo "::set-output name=updated::true"
+          else
+            echo "::set-output name=updated::false"
           fi
 
   build:
