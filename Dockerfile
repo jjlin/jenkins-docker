@@ -19,7 +19,7 @@ LABEL org.opencontainers.image.version="${JENKINS_VERSION}"
 ARG DOCKER_COMPOSE_VERSION
 ARG DOCKER_VERSION
 
-ARG DOCKER_COMPOSE_URL="https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-Linux-x86_64"
+ARG DOCKER_COMPOSE_URL="https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-linux-amd64"
 ARG DOCKER_URL="https://download.docker.com/linux/static/stable/x86_64/docker-${DOCKER_VERSION}.tgz"
 
 #
