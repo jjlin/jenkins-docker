@@ -13,13 +13,18 @@ jobs:
       - name: Check out repo
         uses: actions/checkout@v2
         with:
-          ref: keepalive
           fetch-depth: 0
       - name: Configure Git
         run: |
           git config user.name ${GITHUB_ACTOR}
           git config user.email ${GITHUB_ACTOR}@users.noreply.github.com
-      - name: Update keepalive branch
+      - name: Add keepalive commit
         run: |
-          git commit --amend --no-edit
+          touch .keepalive
+          git add .keepalive
+          git commit -m 'keepalive commit'
+          git push
+      - name: Remove keepalive commit
+        run: |
+          git reset --hard HEAD^
           git push -f
