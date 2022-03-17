@@ -37,7 +37,7 @@ jobs:
     if: needs.parent-image.outputs.updated == 'true'
     steps:
       - name: Check out repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Set build variables
         id: vars
