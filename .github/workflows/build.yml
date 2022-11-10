@@ -18,6 +18,7 @@ jobs:
       - name: Check last push times
         id: check
         run: |
+          set -x
           base_url='https://hub.docker.com/v2/repositories'
           parent_url="${base_url}/jenkins/jenkins/tags/latest"
           child_url="${base_url}/${{ secrets.DOCKER_HUB_USERNAME }}/jenkins-docker/tags/latest"
@@ -42,6 +43,7 @@ jobs:
       - name: Set build variables
         id: vars
         run: |
+          set -x
           datetime="$(date --utc --iso-8601=seconds)"
           echo "datetime=${datetime}" >> "${GITHUB_STATE}"
           docker_version="$(./get-latest-docker-release.sh stable)"
