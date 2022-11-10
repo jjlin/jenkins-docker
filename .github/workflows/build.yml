@@ -26,9 +26,9 @@ jobs:
           parent_last_pushed="$(date -d "$(curl -s "${parent_url}" | jq -r "${filter}")" +%s)"
           child_last_pushed="$(date -d "$(curl -s "${child_url}" | jq -r "${filter}")" +%s)"
           if (( parent_last_pushed > child_last_pushed )); then
-            echo "updated=true" >> "${GITHUB_STATE}"
+            echo "updated=true" >> "${GITHUB_OUTPUT}"
           else
-            echo "updated=false" >> "${GITHUB_STATE}"
+            echo "updated=false" >> "${GITHUB_OUTPUT}"
           fi
 
   build:
@@ -45,11 +45,11 @@ jobs:
         run: |
           set -x
           datetime="$(date --utc --iso-8601=seconds)"
-          echo "datetime=${datetime}" >> "${GITHUB_STATE}"
+          echo "datetime=${datetime}" >> "${GITHUB_OUTPUT}"
           docker_version="$(./get-latest-docker-release.sh stable)"
-          echo "docker_version=${docker_version}" >> "${GITHUB_STATE}"
+          echo "docker_version=${docker_version}" >> "${GITHUB_OUTPUT}"
           docker_compose_version="$(./get-latest-release-tag.sh docker compose)"
-          echo "docker_compose_version=${docker_compose_version}" >> "${GITHUB_STATE}"
+          echo "docker_compose_version=${docker_compose_version}" >> "${GITHUB_OUTPUT}"
 
       - name: Cache Docker layers
         uses: actions/cache@v2
