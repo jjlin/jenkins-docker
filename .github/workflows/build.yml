@@ -38,7 +38,7 @@ jobs:
     if: needs.parent-image.outputs.updated == 'true'
     steps:
       - name: Check out repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v3 # https://github.com/actions/checkout
 
       - name: Set build variables
         id: vars
@@ -52,24 +52,24 @@ jobs:
           echo "docker_compose_version=${docker_compose_version}" >> "${GITHUB_OUTPUT}"
 
       - name: Cache Docker layers
-        uses: actions/cache@v2
+        uses: actions/cache@v3 # https://github.com/actions/cache
         with:
           path: /tmp/.buildx-cache
           key: ${{ runner.os }}-buildx-${{ github.job_number }}
           restore-keys: ${{ runner.os }}-buildx-
 
       - name: Log into Docker Hub
-        uses: docker/login-action@v1 # https://github.com/docker/login-action
+        uses: docker/login-action@v2 # https://github.com/docker/login-action
         with:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1 # https://github.com/marketplace/actions/docker-setup-buildx
+        uses: docker/setup-buildx-action@v2 # https://github.com/marketplace/actions/docker-setup-buildx
 
       - name: Build and push image
         id: docker-build
-        uses: docker/build-push-action@v2 # https://github.com/docker/build-push-action
+        uses: docker/build-push-action@v3 # https://github.com/docker/build-push-action
         with:
           context: .
           file: ./Dockerfile
