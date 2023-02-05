@@ -43,7 +43,7 @@ jobs:
       - name: Set build variables
         id: vars
         run: |
-          set -x
+          set -ex
           datetime="$(date --utc --iso-8601=seconds)"
           echo "datetime=${datetime}" >> "${GITHUB_OUTPUT}"
           docker_version="$(./get-latest-docker-release.sh stable)"
